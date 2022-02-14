@@ -151,6 +151,52 @@ public class SortingAlgorithms {
             arr[k] = temp[k];
     }
 
+    public static void sortAB(String[] arr) {
+        int i = 0;
+        int j = arr.length - 1;
+
+        while ( i < j) { // keep going until i == j
+            // Move i as long as it is looking at an A
+            while (i < j && arr[i] == "A") {
+                i++;
+            }
+            // Move j as long as it is looking at a B
+            while ( i < j && arr[j] == "B") {
+                j--;
+            }
+
+            // Swap
+            if (i != j) {
+                arr[i] = "A";
+                arr[j] = "B";
+            }
+        }
+    }
+
+    public static void quickSort(int arr[]) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+
+    public static void quickSort(int arr[], int low, int high) {
+        int pivotIndex;
+        if (low < high) {
+            pivotIndex = partition(arr, low, high);
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    static int partition(int arr[], int low, int high) {
+        int pivotIndex = 0;
+        int tmp;
+        int max = high;
+        int mid = (low + high) / 2;
+        // FILL IN CODE
+
+        return pivotIndex;
+
+    }
+
     public static void main(String[] args) {
        // int[] arr = {5, 10, 6, 1, -9, 4, 3, 0, 123, 8};
         // selectionSort(arr);
@@ -158,9 +204,17 @@ public class SortingAlgorithms {
         //insertionSort(arr);
         //System.out.println(Arrays.toString(arr));
 
-        int[] arr = {1, 5, 9, 12, 0, 2, 130, 500};
+        /*int[] arr = {1, 5, 9, 12, 0, 2, 130, 500};
         int[] temp = new int[arr.length];
         merge(arr, temp,0, 3, arr.length - 1);
+        System.out.println(Arrays.toString(arr)); */
+
+        String[] arr = {"A", "A", "B", "A", "B", "B", "A", "B", "B", "A"};
+        sortAB(arr);
         System.out.println(Arrays.toString(arr));
+
     }
+
+
+
 }
