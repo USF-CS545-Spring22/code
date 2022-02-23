@@ -1,6 +1,7 @@
 package sorting;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class SortingAlgorithms {
 
@@ -177,7 +178,7 @@ public class SortingAlgorithms {
         quickSort(arr, 0, arr.length - 1);
     }
 
-    public static void quickSort(int arr[], int low, int high) {
+    private static void quickSort(int arr[], int low, int high) {
         int pivotIndex;
         if (low < high) {
             pivotIndex = partition(arr, low, high);
@@ -187,18 +188,56 @@ public class SortingAlgorithms {
     }
 
     static int partition(int arr[], int low, int high) {
-        int pivotIndex = 0;
-        int tmp;
-        int max = high;
-        int mid = (low + high) / 2;
-        // FILL IN CODE
+        int pivotIndex = (low + high) / 2;
+        int pivotElement = arr[pivotIndex];
+        swap(high, pivotIndex, arr);
 
-        return pivotIndex;
+        int i = low;
+        int j = high - 1;
+
+        while (i <= j) {
+            while ((i <= j) && (arr[i] < pivotElement))
+                i++;
+            while ((i <= j) && (arr[j] >= pivotElement))
+                j--;
+            if (i <= j) {
+                swap(i, j, arr);
+                i++;
+                j--;
+            }
+        }
+        swap(i, high, arr);
+        return i;
+
+    }
+
+    public static void binSort(Elem[] arr, int maxValue) {
+        int i, insertIndex = 0;
+        LinkedList<Elem>[] bins = new LinkedList[maxValue+1];
+        for (i = 0; i <= maxValue; i++)
+            bins[i] = new LinkedList<Elem>();
+
+        // Iterate over arr; check the key of each element
+        // and place it in the corresponding bin
+        for (i = 0; i < arr.length; i++) {
+
+            // FILL IN CODE
+        }
+        // Iterate over the bins and place elements back into arr
+        int count  = 0;
+        for (i = 0; i <= maxValue; i++) {
+            // FILL IN CODE
+            // iterate over the bin with index i
+            // add elements to arr, increment the count
+
+        }
 
     }
 
     public static void main(String[] args) {
-       // int[] arr = {5, 10, 6, 1, -9, 4, 3, 0, 123, 8};
+        //int[] arr = {5, 10, 6, 1, 8};
+        //System.out.println(Arrays.toString(arr));
+        //partition(arr, 0, arr.length - 1);
         // selectionSort(arr);
         // bubbleSort(arr);
         //insertionSort(arr);
@@ -209,9 +248,20 @@ public class SortingAlgorithms {
         merge(arr, temp,0, 3, arr.length - 1);
         System.out.println(Arrays.toString(arr)); */
 
-        String[] arr = {"A", "A", "B", "A", "B", "B", "A", "B", "B", "A"};
+        /* String[] arr = {"A", "A", "B", "A", "B", "B", "A", "B", "B", "A"};
         sortAB(arr);
-        System.out.println(Arrays.toString(arr));
+        System.out.println(Arrays.toString(arr));*/
+        Elem[] elements = {
+                new Elem(4, "A"), new Elem(0, "B"),
+                new Elem(2, "C"), new Elem(4, "D"),
+                new Elem(0, "E"), new Elem(1, "F")
+        };
+
+        System.out.println(Arrays.toString(elements));
+        binSort(elements, 4);
+        System.out.println(Arrays.toString(elements));
+
+
 
     }
 
