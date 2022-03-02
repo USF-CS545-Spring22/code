@@ -1,6 +1,7 @@
 package sorting;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class SortingAlgorithms {
@@ -220,18 +221,63 @@ public class SortingAlgorithms {
         // Iterate over arr; check the key of each element
         // and place it in the corresponding bin
         for (i = 0; i < arr.length; i++) {
-
-            // FILL IN CODE
+            Elem current  = arr[i];
+            bins[current.getKey()].addLast(current);
         }
         // Iterate over the bins and place elements back into arr
         int count  = 0;
         for (i = 0; i <= maxValue; i++) {
-            // FILL IN CODE
+            LinkedList<Elem> list  = bins[i];
+            Iterator<Elem> it = list.iterator();
+            while (it.hasNext()) {
+                Elem curr = it.next();
+                arr[count] = curr;
+                count++;
+            }
             // iterate over the bin with index i
             // add elements to arr, increment the count
 
         }
 
+    }
+
+    /** Radix Sort. Assume the number of digits in each key is the same.  */
+    public static void radixSort(Elem[] arr) {
+        // First, compute the number of digits in each key
+        // Since we assume they all have the same # of digits,
+        // it's enough to compute the # of digits in the first key
+        if (arr.length == 0)
+            return;
+        int ndigits = (int) (Math.log10(arr[0].getKey()) + 1);
+
+        Elem[] temp = new Elem[arr.length];
+
+        int[] count = new int[10]; // count array for counting sort
+        for (int i = 0, place = 1; i < ndigits; i++, place *= 10) {
+            // place will be 1, then 10, then 100, then 1000, etc.
+            // initialize count array
+            for (int j = 0; j < 10; j++)
+                count[j] = 0;
+            // iterate over arr and fill out the count array
+            for (int j = 0; j < arr.length; j++) {
+                int k = (arr[j].getKey() / place) % 10;
+                count[k]++;
+            }
+
+            for (int j = 1; j < 10; j++) // modified count array
+                count[j] += count[j - 1];
+
+            // result will be in temp
+            for (int j = arr.length - 1; j >= 0; j--) {
+                count[(arr[j].getKey() / place) % 10]--;
+                int index = count[(arr[j].getKey() / place) % 10];
+                temp[index] = arr[j];
+            }
+
+            // copy the result back into arr
+            for (int j = 0; j < arr.length; j++)
+                arr[j] = temp[j];
+        }
     }
 
     public static void main(String[] args) {
@@ -251,17 +297,16 @@ public class SortingAlgorithms {
         /* String[] arr = {"A", "A", "B", "A", "B", "B", "A", "B", "B", "A"};
         sortAB(arr);
         System.out.println(Arrays.toString(arr));*/
-        Elem[] elements = {
+       Elem[] elements = {
                 new Elem(4, "A"), new Elem(0, "B"),
                 new Elem(2, "C"), new Elem(4, "D"),
                 new Elem(0, "E"), new Elem(1, "F")
         };
 
         System.out.println(Arrays.toString(elements));
-        binSort(elements, 4);
+        // binSort(elements, 4);
+        radixSort(elements);
         System.out.println(Arrays.toString(elements));
-
-
 
     }
 
