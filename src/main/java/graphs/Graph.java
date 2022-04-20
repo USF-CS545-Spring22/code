@@ -1,7 +1,20 @@
 package graphs;
 
+import java.util.Stack;
+
 public class Graph {
     private Edge[] graph; // adjacency list for this graph
+
+    // Static nested class Edge
+    public static class Edge { // Class Edge
+        private int neighbor; // id of the neighbor
+        private Edge next; // reference to the next "edge"
+
+        public Edge(int neighbor) {
+            this.neighbor = neighbor;
+            next = null;
+        }
+    } // class Edge
 
     public Graph(int numVertices) {
         graph = new Edge[numVertices];
@@ -23,16 +36,72 @@ public class Graph {
         }
     }
 
-    // Static nested class Edge
-    public static class Edge { // Class Edge
-        private int neighbor; // id of the neighbor
-        private Edge next; // reference to the next "edge"
+    public int getNumVertices() {
+        return graph.length;
+    }
 
-        public Edge(int neighbor) {
-            this.neighbor = neighbor;
-            next = null;
+    public void printNeighbors(int vertexId) {
+        Edge current = graph[vertexId];
+        while (current != null) {
+            System.out.println(current.neighbor);
+            current = current.next;
         }
-    } // class Edge
+    }
+
+    public void dfs() {
+        boolean visited[]  = new boolean[graph.length];
+        for (int i = 0; i < visited.length; i++) {
+            if (!visited[i])
+                dfsHelperWithStack(i, visited);
+                // dfsHelper(i, visited);
+        }
+    }
+
+    public void dfsHelper(int vertex, boolean[] visited) {
+        Edge tmp;
+        visited[vertex] = true;
+        System.out.println(vertex);
+        // iterate over edges of vertex
+        for (tmp = graph[vertex]; tmp!=null; tmp = tmp.next)
+        {
+            if (!visited[tmp.neighbor])
+                dfsHelper(tmp.neighbor, visited);
+        }
+    }
+
+    public void dfsHelperWithStack(int vertex, boolean[] visited) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(vertex);
+
+        while (!stack.isEmpty()) {
+            // pop the vertex nextV from the stack
+            int nextV = stack.pop();
+            // mark it as visited and print it
+            visited[nextV] = true;
+            System.out.println(nextV);
+            // iterate over the neighbors of nextV
+            Edge tmp = graph[nextV];
+            while (tmp != null) {
+                // if the neighbor has not been visited, push it onto the stack
+                if (!visited[tmp.neighbor])
+                    stack.push(tmp.neighbor);
+                tmp = tmp.next;
+            }
+
+        }
+    }
+
+    public void printAdjacencyList() {
+        for (int i = 0; i < graph.length; i++) {
+            System.out.print(i + ": ");
+            Edge head = graph[i];
+            while (head != null) {
+                System.out.print(head.neighbor + " ");
+                head = head.next;
+            }
+            System.out.println();
+        }
+    }
 
     public static void main(String[] args) {
         Graph g = new Graph(8);
@@ -69,6 +138,7 @@ public class Graph {
         Edge edge75 = new Edge(5);
         g.addEdge(7, edge75);
 
-
+        // g.printAdjacencyList();
+        g.dfs();
     }
 }
